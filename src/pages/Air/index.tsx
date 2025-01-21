@@ -6,6 +6,8 @@ import Header from "../../components/Header";
 import { API_DOMAIN } from "../../utils/env";
 import { AirCargoQuoteRequest } from "../../utils/types";
 
+import { toast } from "react-toastify";
+
 const Air = () => {
   const [fileName, setFileName] = useState<string>("No file chosen");
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
@@ -81,7 +83,14 @@ const Air = () => {
     const response = await axios.get(`${API_DOMAIN}/api/air-cargo`, {
       params: request,
     });
-    setEstimate(response.data.data.estimate);
+    console.log(response.data);
+    if (response.data.status == "success") {
+      setEstimate(response.data.data.estimate);
+      toast.success(response.data.message);
+    } else {
+      console.log(response.data);
+      toast.error(response.data.message);
+    }
   };
 
   return (
