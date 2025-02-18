@@ -13,8 +13,17 @@ const Air = () => {
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
   const [originCountry] = useState<string>("United Arab Emirates");
   const [destinationCountry, setDestinationCountry] = useState<string>("");
-  const [countries, setCountries] = useState<string[]>([
-    "United Arab Emirates",
+  const [countries] = useState<string[]>([
+    "Uganda",
+    "Tanzania",
+    "Rwanda",
+    "Kenya",
+    "Zimbabwe",
+    "Malawi",
+    "Nigeria",
+    "Cameroon",
+    "Ghana",
+    "Central African Republic",
   ]);
   const [estimate, setEstimate] = useState<number>(0);
   const [weight, setWeight] = useState<number>(0);
@@ -51,17 +60,7 @@ const Air = () => {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get(`${API_DOMAIN}/api/countries`);
-        const countryNames = response.data.data;
-        setCountries(countryNames.sort()); // Sort alphabetically for better UX
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
 
-    fetchCountries();
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -71,7 +70,7 @@ const Air = () => {
     e.preventDefault();
     console.log(weight, length, width);
     console.log(originCountry, destinationCountry);
-    
+
     const request: AirCargoQuoteRequest = {
       destination: destinationCountry,
       weight: weight,
@@ -185,7 +184,7 @@ const Air = () => {
                   className="w-1/3 border border-gray-300 text-black rounded-md p-2 h-14 px-8 font-light"
                 >
                   <option value="">Destination Country</option>
-                  {countries.map((country, index) => (
+                  {countries.sort().map((country, index) => (
                     <option key={index} value={country}>
                       {country}
                     </option>
@@ -256,7 +255,9 @@ const Air = () => {
         <div className="max-w-screen-60 h-auto py-3 mx-auto">
           <div className="flex w-full justify-between gap-5 mt-3 items-center">
             <p className="">Estimate</p>
-            <p className="w-1/4 text-3xl font-bold">{estimate.toFixed(2)} AED</p>
+            <p className="w-1/4 text-3xl font-bold">
+              {estimate.toFixed(2)} AED
+            </p>
             <Link
               to="/Quote"
               className="px-20 w-2/5 py-4 rounded-3xl bg-customblue text-white text-center font-semibold hover:bg-customgreen hover:text-black"
